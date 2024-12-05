@@ -1,0 +1,61 @@
+version: '3.8'
+
+networks:
+  stream_main:
+    driver: bridge
+
+services:
+  app:
+    build:
+      context: ./app
+    ports:
+      - "5000:5000"
+    volumes:
+      - /home/sikandar:/home/sikandar
+    networks:
+      - stream_main
+
+  downloader1:
+    build:
+      context: ./downloader
+    ports:
+      - "6001:6000"
+    volumes:
+      - /home/sikandar:/home/sikandar
+    networks:
+      - stream_main
+
+  downloader2:
+    build:
+      context: ./downloader
+    ports:
+      - "6002:6000"
+    volumes:
+      - /home/sikandar:/home/sikandar
+    networks:
+      - stream_main
+
+
+  downloader3:
+    build:
+      context: ./downloader
+    ports:
+      - "6003:6000"
+    volumes:
+      - /home/sikandar:/home/sikandar
+    networks:
+      - stream_main
+
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "81:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    networks:
+      - stream_main
+    depends_on:
+      - downloader1
+      - downloader2
+      - downloader3

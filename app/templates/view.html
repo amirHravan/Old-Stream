@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ folder }} Folder</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>{{ folder }} Folder</h1>
+        <ul>
+            {% for file in files %}
+            <li>
+                {% if file.is_dir %}
+                <a href="/folder/{{ file.name }}">{{ file.name }}</a>
+                {% else %}
+                {{ file.name }}
+                {% if ".mp4" in file.name or ".mkv" in file.name %}
+                <a href="/stream/{{ file.name }}" class="button">Stream</a>
+                <a href="http://192.168.0.188:81/download/{{ file.name }}" class="button">Download</a>
+                {% endif %}
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>

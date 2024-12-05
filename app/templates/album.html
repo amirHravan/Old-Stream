@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Picture Album</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Picture Album</h1>
+        <div id="album">
+            <div class="image-container">
+                <img id="current-image" src="" alt="Album Image">
+            </div>
+            <div class="controls">
+                <button id="previous-button">Previous</button>
+                <button id="next-button">Next</button>
+            </div>
+        </div>
+        <p class="no-images" id="no-images" style="display: none;">No images available in this folder.</p>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const images = {{ images|tojson|safe }};
+            const album = document.getElementById("album");
+            const noImages = document.getElementById("no-images");
+            const currentImage = document.getElementById("current-image");
+            const previousButton = document.getElementById("previous-button");
+            const nextButton = document.getElementById("next-button");
+    
+            let currentIndex = 0;
+    
+            // Check if images array is empty
+            if (!images || images.length === 0) {
+                album.style.display = "none";
+                noImages.style.display = "block";
+                return;
+            }
+    
+            // Display the first image
+            currentImage.src = `/pictures/${images[currentIndex]}`;
+    
+            // Event listener for Previous button
+            previousButton.addEventListener("click", () => {
+                currentIndex = (currentIndex - 1 + images.length) % images.length;
+                currentImage.src = `/pictures/${images[currentIndex]}`;
+            });
+    
+            // Event listener for Next button
+            nextButton.addEventListener("click", () => {
+                currentIndex = (currentIndex + 1) % images.length;
+                currentImage.src = `/pictures/${images[currentIndex]}`;
+            });
+        });
+    </script>
+    
+</body>
+</html>
